@@ -1,0 +1,46 @@
+# Environment & secrets
+.env
+*.env
+.env.*
+!.env.example
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+.venv/
+venv/
+env/
+*.egg-info/
+dist/
+build/
+.eggs/
+
+# Models & large binary files
+models/**/*.pt
+models/**/*.onnx
+models/**/*.bin
+models/**/*.ckpt
+
+# Data / saved frames
+data/
+temp_image/
+
+# Audio (compiled)
+audio/*.ts
+
+# Logs
+*.log
+logs/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
