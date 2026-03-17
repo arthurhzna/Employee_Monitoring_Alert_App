@@ -6,8 +6,6 @@
 
 ## Overview
 
-AlertEyeLevel is a production-grade computer vision pipeline designed to run on edge hardware (e.g., an NVIDIA Jetson or a GPU-equipped server) co-located with CCTV cameras. Each instance monitors one camera stream end-to-end — from raw RTSP frames to structured database records — with no cloud dependency for inference.
-
 The system is built around a **layered, dependency-injected architecture**: a thin pipeline orchestrator delegates to composable feature modules, each of which owns its own ML model(s) and emits typed events to a thread-safe event bus. Persistence, alerting, and async ML tasks are handled by subscribers — keeping the hot path free of I/O.
 
 ---
@@ -20,7 +18,7 @@ The system is built around a **layered, dependency-injected architecture**: a th
 | **Face detection** | MediaPipe FaceDetection (model 0) | Per tracked person |
 | **Face direction / attention** | Landmark distance ratios (MediaPipe FaceMesh, 468 pts) | Per detected face |
 | **Drowsiness** | Eye Aspect Ratio (EAR) < 0.15 + yawn confirmation | Per detected face |
-| **Yawning** | Mouth Aspect Ratio via face mesh landmarks | Per detected face |
+| **Yawning** | Mouth Aspect Ratio (MAR) via face mesh landmarks | Per detected face |
 | **Hand-to-face contact** | Hand landmark bounding box ∩ face bounding box | Per detected face |
 | **Dwell time** | Cumulative "Looking" / "Not Looking" time per track ID | Per person session |
 | **Face recognition** | InsightFace `buffalo_l` (async microservice) | On first "Looking" frame |
