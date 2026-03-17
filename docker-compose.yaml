@@ -1,0 +1,83 @@
+services:
+  redis:
+    image: redis:alpine
+    container_name: alert-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - alert-redis_data:/data
+    command: ["redis-server", "--appendonly", "yes", "--requirepass", "${REDIS_PASSWORD:-supersecretpassword}"]
+    healthcheck:
+      test: ["CMD", "redis-cli", "--raw", "incr", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+    networks:
+      - redis-network
+
+  redisinsight:
+    image: redis/redisinsight:latest
+    container_name: alert-redisinsight
+    ports:
+      - "5540:5540"
+    restart: unless-stopped
+    networks:
+      - redis-network
+
+  postgres:
+    image: postgres:15-alpine
+    container_name: alert-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${DB_USERNAME:-postgres}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-postgres}
+      POSTGRES_DB: ${DB_NAME:-alert}
+      PGDATA: /var/lib/postgresql/data/pgdata
+    ports:
+      - "${DB_PORT:-5433}:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USERNAME:-postgres} -d ${DB_NAME:-alert}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - alert-network
+
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: alert-pgadmin
+    restart: always
+    ports:
+      - "8888:80"
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL:-user-name@domain-name.com}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD:-strong-password}
+    volumes:
+      - alert-pgadmin-data:/var/lib/pgadmin
+    networks:
+      - alert-network
+
+
+networks:
+  redis-network:
+  alert-network:
+
+volumes:
+  alert-redis_data:
+  postgres_data:
+  alert-pgadmin-data:
+    #alert container
+    #face container
+    #vlm container
+
+
+
+# Host: alert-redis
+# Port: 6379
+# Username: default
+# Password: isi nilai REDIS_PASSWORD dari .env kamu (kalau kamu nggak set, default-nya supersecretpassword sesuai compose)
+# Atau pakai URL:
+# redis://default:<PASSWORD>@alert-redis:6379

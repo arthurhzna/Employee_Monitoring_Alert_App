@@ -378,20 +378,6 @@ docker-compose up -d
 
 ---
 
-## Installation
-
-```bash
-git clone <repo-url>
-cd AlertEyeLevel/alert_app
-
-python -m venv .venv
-source .venv/bin/activate
-
-pip install -r requirements.txt
-```
-
----
-
 ## Configuration
 
 ```bash
@@ -419,17 +405,6 @@ cp .env.example .env
 | `MQTT_PORT` | MQTT broker port |
 | `MQTT_USER` | MQTT username |
 | `MQTT_PASS` | MQTT password |
-
----
-
-## Running
-
-```bash
-cd alert_app
-python main.py
-```
-
-Press `q` in the display window or `Ctrl+C` to stop.
 
 ---
 
